@@ -1,0 +1,393 @@
+<title>Vendas por Vídeo</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=Karla:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap');
+
+  :root{
+    --bg:#F1F2F5;
+    --surface:#FFFFFF;
+    --ink:#181B22;
+    --ink-muted:#5B6472;
+    --accent:#E2483A;
+    --accent-soft:#FBE3DF;
+    --line:#E1E4E9;
+    --shadow: 0 1px 2px rgba(24,27,34,0.06), 0 8px 24px rgba(24,27,34,0.06);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#111318;
+      --surface:#191C22;
+      --ink:#EDEFF3;
+      --ink-muted:#9AA2AF;
+      --accent:#FF6B57;
+      --accent-soft:#2E1D1A;
+      --line:#2A2E37;
+      --shadow: 0 1px 2px rgba(0,0,0,0.35), 0 8px 24px rgba(0,0,0,0.3);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#111318;
+    --surface:#191C22;
+    --ink:#EDEFF3;
+    --ink-muted:#9AA2AF;
+    --accent:#FF6B57;
+    --accent-soft:#2E1D1A;
+    --line:#2A2E37;
+    --shadow: 0 1px 2px rgba(0,0,0,0.35), 0 8px 24px rgba(0,0,0,0.3);
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Karla', -apple-system, Segoe UI, sans-serif;
+    -webkit-font-smoothing:antialiased;
+    padding-inline:20px;
+  }
+  a{color:inherit;}
+
+  .page{
+    max-width:700px;
+    margin:0 auto;
+    padding-block:36px 64px;
+  }
+
+  header.masthead{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    padding-bottom:20px;
+    margin-bottom:28px;
+    border-bottom:1px solid var(--line);
+    font-family:'JetBrains Mono', monospace;
+    font-size:12px;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    color:var(--ink-muted);
+  }
+  .masthead .mark{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    color:var(--ink);
+    font-family:'Archivo', sans-serif;
+    font-weight:800;
+  }
+  .mark svg{flex:none;}
+
+  .eyebrow{
+    display:inline-block;
+    font-family:'JetBrains Mono', monospace;
+    font-size:12px;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--accent);
+    background:var(--accent-soft);
+    padding:5px 10px;
+    border-radius:4px;
+    margin-bottom:16px;
+  }
+
+  h1{
+    font-family:'Archivo', sans-serif;
+    font-weight:800;
+    font-size:clamp(28px, 5vw, 38px);
+    line-height:1.14;
+    letter-spacing:-0.01em;
+    margin:0 0 16px;
+    text-wrap:balance;
+  }
+
+  .meta{
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px 14px;
+    align-items:center;
+    font-family:'JetBrains Mono', monospace;
+    font-size:12.5px;
+    color:var(--ink-muted);
+    margin-bottom:28px;
+  }
+  .meta span:not(:last-child)::after{
+    content:'·';
+    margin-left:14px;
+    color:var(--line);
+  }
+
+  figure{margin:0 0 8px;}
+  figure img{
+    width:100%;
+    max-width:100%;
+    display:block;
+    border-radius:10px;
+    aspect-ratio:16/11;
+    object-fit:cover;
+    background:var(--line);
+  }
+  figcaption{
+    font-family:'JetBrains Mono', monospace;
+    font-size:11.5px;
+    color:var(--ink-muted);
+    margin-top:8px;
+    margin-bottom:32px;
+  }
+
+  .lead{
+    font-family:'Karla', sans-serif;
+    font-weight:500;
+    font-size:19px;
+    line-height:1.6;
+    color:var(--ink);
+    margin:0 0 28px;
+  }
+
+  article p{
+    font-size:16.5px;
+    line-height:1.75;
+    color:var(--ink);
+    max-width:64ch;
+    margin:0 0 20px;
+  }
+  article h2{
+    font-family:'Archivo', sans-serif;
+    font-weight:700;
+    font-size:23px;
+    line-height:1.3;
+    margin:40px 0 16px;
+    text-wrap:balance;
+  }
+
+  .callout{
+    background:var(--accent-soft);
+    border-radius:10px;
+    padding:20px 22px;
+    margin:28px 0;
+    display:flex;
+    gap:14px;
+  }
+  .callout .dot{
+    flex:none;
+    width:8px;height:8px;
+    border-radius:50%;
+    background:var(--accent);
+    margin-top:9px;
+  }
+  .callout p{
+    margin:0;
+    font-size:15px;
+    line-height:1.65;
+    color:var(--ink);
+  }
+  .callout strong{color:var(--accent);}
+
+  ol.habits{
+    list-style:none;
+    counter-reset:habit;
+    margin:24px 0 32px;
+    padding:0;
+    display:flex;
+    flex-direction:column;
+    gap:0;
+    border-top:1px solid var(--line);
+  }
+  ol.habits li{
+    counter-increment:habit;
+    display:grid;
+    grid-template-columns:40px 1fr;
+    gap:16px;
+    padding:18px 0;
+    border-bottom:1px solid var(--line);
+  }
+  ol.habits li::before{
+    content:counter(habit, decimal-leading-zero);
+    font-family:'JetBrains Mono', monospace;
+    font-size:13px;
+    color:var(--accent);
+    padding-top:2px;
+  }
+  ol.habits h3{
+    font-family:'Karla', sans-serif;
+    font-weight:700;
+    font-size:16px;
+    margin:0 0 4px;
+  }
+  ol.habits p{
+    margin:0;
+    font-size:15px;
+    line-height:1.65;
+    color:var(--ink-muted);
+    max-width:56ch;
+  }
+
+  .divider{
+    height:1px;
+    background:var(--line);
+    margin:44px 0;
+    border:0;
+  }
+
+  .closing-card{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:12px;
+    padding:28px;
+    margin-top:12px;
+    box-shadow:var(--shadow);
+  }
+  .closing-card p.kicker{
+    font-family:'JetBrains Mono', monospace;
+    font-size:11.5px;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    color:var(--ink-muted);
+    margin:0 0 10px;
+  }
+  .closing-card h3{
+    font-family:'Archivo', sans-serif;
+    font-size:20px;
+    font-weight:700;
+    margin:0 0 10px;
+    text-wrap:balance;
+  }
+  .closing-card p{
+    font-size:15px;
+    line-height:1.65;
+    color:var(--ink-muted);
+    margin:0 0 20px;
+    max-width:56ch;
+  }
+  .cta-btn{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    background:var(--accent);
+    color:#FFF6F4;
+    text-decoration:none;
+    font-family:'Karla', sans-serif;
+    font-weight:700;
+    font-size:15px;
+    padding:12px 20px;
+    border-radius:8px;
+    transition:opacity .15s ease;
+  }
+  .cta-btn:hover{opacity:0.88;}
+  .cta-btn:focus-visible{outline:2px solid var(--accent); outline-offset:3px;}
+
+  footer{
+    margin-top:48px;
+    padding-top:20px;
+    border-top:1px solid var(--line);
+    font-family:'JetBrains Mono', monospace;
+    font-size:11.5px;
+    color:var(--ink-muted);
+    line-height:1.7;
+  }
+
+  @media (max-width:480px){
+    ol.habits li{grid-template-columns:28px 1fr;}
+  }
+</style>
+
+<div class="page">
+
+  <header class="masthead">
+    <div class="mark">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="2" y="6" width="5" height="8" rx="1" stroke="currentColor" stroke-width="1.3"/>
+        <rect x="9" y="2" width="5" height="12" rx="1" stroke="currentColor" stroke-width="1.3"/>
+      </svg>
+      Vitrine Digital
+    </div>
+    <span>E-commerce</span>
+  </header>
+
+  <article>
+    <span class="eyebrow">Vendas online</span>
+    <h1>TikTok Shop: como funciona a nova onda de vendas por vídeo</h1>
+
+    <div class="meta">
+      <span>Por Redação</span>
+      <span>Atualizado em 17 de setembro de 2026</span>
+      <span>Leitura de 5 min</span>
+    </div>
+
+    <figure>
+      <img src="hero.jpg" alt="Centro de distribuição com prateleiras cheias de caixas de papelão organizadas para envio">
+      <figcaption>Por trás de cada venda por vídeo existe uma operação de estoque, embalagem e envio que precisa funcionar.</figcaption>
+    </figure>
+
+    <p class="lead">Vender dentro de vídeos curtos deixou de ser novidade e virou canal de vendas para lojistas de todos os tamanhos. Mas colocar uma vitrine no ar é só o primeiro passo — entender como o modelo funciona ajuda a evitar surpresas.</p>
+
+    <p>O TikTok Shop integra catálogo, checkout e conteúdo em vídeo dentro do próprio aplicativo: o cliente descobre o produto em um vídeo ou live e compra sem sair da plataforma. Para quem vende, isso muda a forma de divulgar — o vídeo passa a ser parte da vitrine, não só um anúncio isolado.</p>
+
+    <p>Esse formato tem atraído lojistas e criadores porque reduz etapas entre descoberta e compra. Mas, como qualquer canal de vendas, ele exige aprendizado: entender o algoritmo, testar formatos de vídeo e organizar a logística por trás de cada pedido.</p>
+
+    <div class="callout">
+      <span class="dot"></span>
+      <p><strong>Vale lembrar:</strong> resultado em vendas online depende de nicho, concorrência, qualidade do produto e consistência de quem vende. Não existe fórmula que garanta faturamento — o canal é uma ferramenta, não uma garantia.</p>
+    </div>
+
+    <h2>Cinco pontos para entender antes de começar</h2>
+
+    <ol class="habits">
+      <li>
+        <div>
+          <h3>Valide o nicho antes de investir</h3>
+          <p>Pesquise se existe demanda real para o produto antes de comprar estoque ou fechar contrato com fornecedor.</p>
+        </div>
+      </li>
+      <li>
+        <div>
+          <h3>Escolha fornecedores com cuidado</h3>
+          <p>Prazo de entrega, qualidade consistente e política de troca clara evitam boa parte dos problemas com clientes.</p>
+        </div>
+      </li>
+      <li>
+        <div>
+          <h3>Conheça as regras da plataforma</h3>
+          <p>Elegibilidade por país, categorias permitidas, taxas e políticas de conteúdo mudam com frequência — vale revisar antes de anunciar.</p>
+        </div>
+      </li>
+      <li>
+        <div>
+          <h3>Invista em conteúdo consistente</h3>
+          <p>Um vídeo isolado raramente sustenta vendas. O que costuma funcionar é publicar com regularidade e testar formatos diferentes.</p>
+        </div>
+      </li>
+      <li>
+        <div>
+          <h3>Acompanhe métricas e ajuste</h3>
+          <p>Nem todo vídeo ou produto performa igual. Acompanhar o que converte — e cortar o que não funciona — faz parte do processo.</p>
+        </div>
+      </li>
+    </ol>
+
+    <figure>
+      <img src="tags.jpg" alt="Diversas etiquetas vermelhas escritas SALE espalhadas sobre um fundo escuro">
+      <figcaption>Preço e promoção também são hipótese, não certeza — o que funciona para um produto pode não funcionar para outro.</figcaption>
+    </figure>
+
+    <h2>Um canal a mais, não um atalho</h2>
+    <p>O TikTok Shop pode ser um canal relevante dentro de uma estratégia de vendas mais ampla, mas funciona melhor como parte de um processo — com teste, ajuste e acompanhamento — do que como solução isolada. Assim como em qualquer canal de e-commerce, o resultado tende a acompanhar o esforço e a consistência de quem está do outro lado da tela.</p>
+
+    <p>Antes de escalar investimento em estoque ou anúncios, vale começar pequeno, medir o retorno e só então decidir o próximo passo.</p>
+
+    <hr class="divider">
+
+    <div class="closing-card">
+      <p class="kicker">Continue por aqui</p>
+      <h3>Quer entender melhor cada uma dessas etapas?</h3>
+      <p>Preparamos um guia com mais detalhes sobre como estruturar catálogo, logística e conteúdo para vender por vídeo.</p>
+      <a class="cta-btn" href="#" target="_blank" rel="noopener">
+        Continuar lendo
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 11L11 3M11 3H4.5M11 3V9.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+
+    <footer>
+      Este conteúdo tem caráter informativo. Vender online envolve custos, riscos e variáveis fora de controle — não há garantia de faturamento ou resultado.
+    </footer>
+  </article>
+
+</div>
